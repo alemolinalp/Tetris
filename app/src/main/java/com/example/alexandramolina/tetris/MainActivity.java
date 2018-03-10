@@ -43,7 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
     int v = 0;
 
+    int indice = -1;
 
+    boolean rota4 = false;
+
+    boolean cont = true;
+
+    boolean pasaron2 = false;
+
+    boolean piezaAnterior4 = false;
 
     public void btnIzqClicked(View view){
 
@@ -126,25 +134,78 @@ public class MainActivity extends AppCompatActivity {
         choqueDer = 0;
     }
     public void btn_rotar(View view){
-        for(Pieza p: piezaNueva){
-            piezas[p.getX()][p.getY()] = new Pieza(-1,-1,1);
-        }
-        for(int i = 0; i < 4; i++){
-            if(v%2==0) {
-                piezaNueva.get(i).sumarX(lista.get(0)[i][0]);
-                piezaNueva.get(i).sumarY(lista.get(0)[i][1]);
+        if(rota4 == false) {
+            Log.d("Tiene:","2");
+            for (Pieza p : piezaNueva) {
+                piezas[p.getX()][p.getY()] = new Pieza(-1, -1, 1);
             }
-            else{
-                piezaNueva.get(i).restarX(lista.get(0)[i][0]);
-                piezaNueva.get(i).restarY(lista.get(0)[i][1]);
-            }
+            for (int i = 0; i < 4; i++) {
+                if (v % 2 == 0) {
+                    Log.d("suma", "suma");
+                    //Log.d("sumar X",Integer.toString(lista.get(indice)[i][0]));
+                    //Log.d("sumar Y",Integer.toString(lista.get(indice)[i][1]));
+                    piezaNueva.get(i).sumarX(lista.get(indice)[i][0]);
+                    piezaNueva.get(i).sumarY(lista.get(indice)[i][1]);
+                } else {
+                    Log.d("resta", "resta");
+                    //Log.d("restar X",Integer.toString(lista.get(indice)[i][0]));
+                    //Log.d("restar Y",Integer.toString(lista.get(indice)[i][1]));
+                    piezaNueva.get(i).restarX(lista.get(indice)[i][0]);
+                    piezaNueva.get(i).restarY(lista.get(indice)[i][1]);
+                }
 
 
+            }
+            for (Pieza p : piezaNueva) {
+                //Log.d("x",Integer.toString(p.getX()));
+                //Log.d("y",Integer.toString(p.getY()));
+                piezas[p.getX()][p.getY()] = p;
+            }
+            aumentarV();
         }
-        for(Pieza p: piezaNueva){
-            piezas[p.getX()][p.getY()] = p;
+
+        ///////////////////////////////////////
+
+        else{
+            Log.d("Tiene:","4");
+            for (Pieza p : piezaNueva) {
+                piezas[p.getX()][p.getY()] = new Pieza(-1, -1, 1);
+            }
+            for (int i = 0; i < 4; i++) {
+                if (v % 2 == 0) {
+                    if(cont){
+                        //Log.d("indice","suma");
+                        piezaNueva.get(i).sumarX(lista.get(indice)[i][0]);
+                        piezaNueva.get(i).sumarY(lista.get(indice)[i][1]);
+                    }
+                    else{
+                        //Log.d("indice","resta");
+                        piezaNueva.get(i).restarX(lista.get(indice)[i][0]);
+                        piezaNueva.get(i).restarY(lista.get(indice)[i][1]);
+                    }
+                }
+                else {
+                    if(cont){
+                        //Log.d("indice+1","suma");
+                        piezaNueva.get(i).sumarX(lista.get(indice+1)[i][0]);
+                        piezaNueva.get(i).sumarY(lista.get(indice+1)[i][1]);
+                        pasaron2 = true;
+
+                    }else{
+                        //Log.d("indice+1","resta");
+                        piezaNueva.get(i).restarX(lista.get(indice+1)[i][0]);
+                        piezaNueva.get(i).restarY(lista.get(indice+1)[i][1]);
+                        pasaron2 = true;
+                    }
+                }
+            }
+            for (Pieza p : piezaNueva) {
+                //Log.d("x",Integer.toString(p.getX()));
+                //Log.d("y",Integer.toString(p.getY()));
+                piezas[p.getX()][p.getY()] = p;
+            }
+            aumentarV();
         }
-        aumentarV();
     }
 
     @Override
@@ -178,25 +239,55 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        tipo_pieza = 1;//(int) (Math.random() * 7) + 1;
+        tipo_pieza = (int) (Math.random() * 4) + 1;
+
         if (tipo_pieza == 1) {
-
+            rota4 = false;
             piezaNueva = creador.Letra_I();
-
             lista = creador.obtenerRotacion();
-
+            if(piezaAnterior4){
+                indice++;
+                indice++;
+                piezaAnterior4 = false;
+            }
+            indice++;
+            v=0;
         } else if (tipo_pieza == 2) {
-            piezaNueva = creador.Letra_J();
+            rota4 = false;
+            piezaNueva = creador.Letra_Z();
+            lista = creador.obtenerRotacion();
+            if(piezaAnterior4){
+                indice++;
+                indice++;
+                piezaAnterior4 = false;
+            }
+            indice++;
+            v=0;
         } else if (tipo_pieza == 3) {
-            piezaNueva = creador.Letra_L();
+            rota4 = false;
+            piezaNueva = creador.Letra_S();
+            lista = creador.obtenerRotacion();
+            if(piezaAnterior4){
+                indice++;
+                indice++;
+                piezaAnterior4 = false;
+            }
+            indice++;
+            v=0;
         } else if (tipo_pieza == 4) {
+            rota4 = true;
+            cont = true;
+            piezaAnterior4 = true;
             piezaNueva = creador.Letra_T();
+            lista = creador.obtenerRotacion();
+            indice++;
+            v=0;
         } else if (tipo_pieza == 5) {
             piezaNueva = creador.Letra_O();
-        } else if (tipo_pieza == 2) {
-            piezaNueva = creador.Letra_S();
+        } else if (tipo_pieza == 6) {
+            piezaNueva = creador.Letra_L();
         } else {
-            piezaNueva = creador.Letra_Z();
+            piezaNueva = creador.Letra_J();
         }
         for(Pieza p: piezaNueva){
             piezas[p.getX()][p.getY()] = p;
@@ -261,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
                                 revisar_tablero();
 
                                 for(Pieza p: piezaNueva){
-                                    tipo_pieza = (int) (Math.random() * 7) + 1;
+                                    tipo_pieza = (int) (Math.random() * 4) + 1;
                                     if(choque == 0){
                                         p.aumentarX();
                                         piezas[p.getX()][p.getY()] = p;
@@ -276,19 +367,52 @@ public class MainActivity extends AppCompatActivity {
                                     crearPieza = 0;
                                     choque = 0;
                                     if (tipo_pieza == 1) {
+                                        rota4 = false;
                                         piezaNueva = creador.Letra_I();
+                                        lista = creador.obtenerRotacion();
+                                        if(piezaAnterior4){
+                                            indice++;
+                                            indice++;
+                                            piezaAnterior4 = false;
+                                        }
+                                        indice++;
+                                        v=0;
                                     } else if (tipo_pieza == 2) {
-                                        piezaNueva = creador.Letra_J();
+                                        rota4 = false;
+                                        piezaNueva = creador.Letra_Z();
+                                        lista = creador.obtenerRotacion();
+                                        if(piezaAnterior4){
+                                            indice++;
+                                            indice++;
+                                            piezaAnterior4 = false;
+                                        }
+                                        indice++;
+                                        v=0;
                                     } else if (tipo_pieza == 3) {
-                                        piezaNueva = creador.Letra_L();
+                                        rota4 = false;
+                                        piezaNueva = creador.Letra_S();
+                                        lista = creador.obtenerRotacion();
+                                        if(piezaAnterior4){
+                                            indice++;
+                                            indice++;
+                                            piezaAnterior4 = false;
+                                        }
+                                        indice++;
+                                        v=0;
                                     } else if (tipo_pieza == 4) {
+                                        rota4 = true;
+                                        cont = true;
+                                        piezaAnterior4 = true;
                                         piezaNueva = creador.Letra_T();
+                                        lista = creador.obtenerRotacion();
+                                        indice++;
+                                        v=0;
                                     } else if (tipo_pieza == 5) {
                                         piezaNueva = creador.Letra_O();
-                                    } else if (tipo_pieza == 2) {
-                                        piezaNueva = creador.Letra_S();
+                                    } else if (tipo_pieza == 6) {
+                                        piezaNueva = creador.Letra_L();
                                     } else {
-                                        piezaNueva = creador.Letra_Z();
+                                        piezaNueva = creador.Letra_J();
                                     }
                                 }
 
@@ -358,6 +482,18 @@ public class MainActivity extends AppCompatActivity {
     }
     public void aumentarV(){
         v++;
-        Log.d("v",Integer.toString(v));
+        //Log.d("v",Integer.toString(v));
+        if(rota4){
+            if(pasaron2){
+                pasaron2 = false;
+                if(cont) {
+                    cont = false;
+                }
+                else{
+                    cont = true;
+                }
+            }
+        }
     }
+
 }
