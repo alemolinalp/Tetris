@@ -7,7 +7,10 @@ import java.util.ArrayList;
  */
 
 public class Creador {
+
     int color;
+    ArrayList<int[][]> listaRotacion = new ArrayList();
+    int matrizI[][] = {{3,3},{2,2},{1,1},{0,0}};
 
     public ArrayList<Pieza> Letra_O(){
         ArrayList<Pieza> arrayList = new ArrayList<Pieza>();
@@ -108,6 +111,11 @@ public class Creador {
         arrayList.add(p4);
 
         return arrayList;
+    }
+
+    public ArrayList<int[][]> obtenerRotacion(){
+        listaRotacion.add(matrizI);
+        return listaRotacion;
     }
 }
 

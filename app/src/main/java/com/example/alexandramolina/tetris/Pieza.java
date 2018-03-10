@@ -51,6 +51,18 @@ public class Pieza {
     public void disminuirX(){
         x--;
     }
+    public void sumarX(int i){
+        x+=i;
+    }
+    public void sumarY(int j){
+        y+=j;
+    }
+    public void restarX(int i){
+        x-=i;
+    }
+    public void restarY(int j){
+        y-=j;
+    }
 }
 
 

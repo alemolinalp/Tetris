@@ -1,61 +1,31 @@
 package com.example.alexandramolina.tetris;
 
-import android.media.Image;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.util.Log;
 import android.support.v7.widget.GridLayout;
-import android.widget.TextView;
-
-import java.util.Timer;
-
+import android.widget.SeekBar;
 import java.util.ArrayList;
-import java.util.TimerTask;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.util.Log;
 
 
 
 public class MainActivity extends AppCompatActivity {
 
-    //matriz para saber donde hay piezas, 1 significara que tiene una pieza y 0 que esta vacia
-    int[][] matriz1 = {{0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,0,0},};
-
+    SeekBar seekBar;
     ImageView[][] lista_views = new ImageView[22][12];
-
-    //random para ver cual color de figura lanzar 1: azul, 2: verde, 3: amarillo, 4: morado, 5: naranja
-    int color = (int) (Math.random() * 5) + 1;
-
-    //random para ver cual figura lazar
-    int figura = (int) (Math.random() * 7) + 1;
-
-    Timer timer;
-    TimerTask timertask;
-
-    int x = 0;
-    int y = 6;
-
 
     Creador creador = new Creador();
 
     ArrayList<Pieza> piezaNueva;
 
     Pieza[][] piezas = new Pieza[22][12];
+
+    ArrayList<int[][]> lista = new ArrayList();
 
     int tipo_pieza;
 
@@ -69,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
     int choqueAbj = 0;
 
-    int dificultad = 500;
+    int dificultad = 1000;
+
+    int v = 0;
 
 
 
@@ -84,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             if (p.getY() == 0) {
                 choqueIzq = 1;
             }
-            else if(piezas[p.getX()][p.getY()-1].getX() != -1) {
+            else if(piezas[p.getX()][p.getY()-1].getX() != -1){
                 choqueIzq = 1;
             }
         }
@@ -153,15 +125,66 @@ public class MainActivity extends AppCompatActivity {
         }
         choqueDer = 0;
     }
+    public void btn_rotar(View view){
+        for(Pieza p: piezaNueva){
+            piezas[p.getX()][p.getY()] = new Pieza(-1,-1,1);
+        }
+        for(int i = 0; i < 4; i++){
+            if(v%2==0) {
+                piezaNueva.get(i).sumarX(lista.get(0)[i][0]);
+                piezaNueva.get(i).sumarY(lista.get(0)[i][1]);
+            }
+            else{
+                piezaNueva.get(i).restarX(lista.get(0)[i][0]);
+                piezaNueva.get(i).restarY(lista.get(0)[i][1]);
+            }
+
+
+        }
+        for(Pieza p: piezaNueva){
+            piezas[p.getX()][p.getY()] = p;
+        }
+        aumentarV();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        seekBar = findViewById(R.id.seekBar1);
+
         imprimir_tablero();
-        tipo_pieza = (int) (Math.random() * 7) + 1;
+
+        seekBar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        seekBar.getThumb().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+
+        seekBar.setMax(1000);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                updateDificultad(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        tipo_pieza = 1;//(int) (Math.random() * 7) + 1;
         if (tipo_pieza == 1) {
+
             piezaNueva = creador.Letra_I();
+
+            lista = creador.obtenerRotacion();
+
         } else if (tipo_pieza == 2) {
             piezaNueva = creador.Letra_J();
         } else if (tipo_pieza == 3) {
@@ -187,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < 24 ; i++){
             for(int j = 0; j < 14; j++){
                 ImageView imageView = new ImageView(this);
-                //String tag = Integer.toString(i)+"-"+Integer.toString(j);
                 int tag = t++;
                 imageView.setTag(tag);
                 gridlayout.addView(imageView);
@@ -208,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     while (!isInterrupted()) {
-                        Thread.sleep(500);
+                        Thread.sleep(dificultad);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -235,6 +257,8 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
+
+                                revisar_tablero();
 
                                 for(Pieza p: piezaNueva){
                                     tipo_pieza = (int) (Math.random() * 7) + 1;
@@ -301,5 +325,39 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+    public void updateDificultad(int i){
+        dificultad = i;
+    }
+
+    public void revisar_tablero(){
+        for(int i = 0; i < 22 ; i++){
+            boolean a = true;
+            for(int j = 0; j < 12; j++){
+                if (piezas[i][j].getX() == -1) {
+                    a = false;
+                }
+
+            }
+            if(a) {
+                for (int x = 22; x > 0; x--) {
+                    if (x == i) {
+                        for (int y = 0; y < 12; y++) {
+                            piezas[x][y] = new Pieza(-1,-1,-1);
+                        }
+                    }
+                    else if(x < i){
+                        for (int y = 0; y < 12; y++) {
+                            piezas[x+1][y] = piezas[x][y];
+                            piezas[x][y] = new Pieza(-1,-1,-1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void aumentarV(){
+        v++;
+        Log.d("v",Integer.toString(v));
     }
 }
