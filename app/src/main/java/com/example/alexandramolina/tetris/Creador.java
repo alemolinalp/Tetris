@@ -15,6 +15,11 @@ public class Creador {
     int matrizS[][] = {{0,0},{1,1},{0,2},{1,3}};
     int matrizT1[][] ={{-1,1},{0,0},{1,-1},{-1,-1}};
     int matrizT2[][] ={{1,1},{0,0},{-1,-1},{-1,1}};
+    int matrizL1[][] = {{1,-1},{0,0},{-1,1},{-2,0}};
+    int matrizL2[][] = {{1,1},{0,0},{-1,-1},{0,-2}};
+    int matrizJ1[][] = {{1,1},{0,0},{-1,-1},{-2,0}};
+    int matrizJ2[][] = {{1,-1},{0,0},{-1,1},{0,2}};
+    int matrizO[][] = {{0,0},{0,0},{0,0},{0,0}};
     int tipo_p = 0;
 
     public ArrayList<Pieza> Letra_O(){
@@ -138,6 +143,17 @@ public class Creador {
         else if(tipo_p == 6){
             listaRotacion.add(matrizT1);
             listaRotacion.add(matrizT2);
+        }
+        else if(tipo_p == 3){
+            listaRotacion.add(matrizL1);
+            listaRotacion.add(matrizL2);
+        }
+        else if(tipo_p == 4){
+            listaRotacion.add(matrizJ1);
+            listaRotacion.add(matrizJ2);
+        }
+        else if(tipo_p == 1){
+            listaRotacion.add(matrizO);
         }
         return listaRotacion;
     }

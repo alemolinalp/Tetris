@@ -110,6 +110,38 @@
             android:background="@drawable/rotar"
             android:onClick="btn_rotar" />
 
+        <TextView
+            android:id="@+id/txtendGame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/button4"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/background_light"
+            android:textSize="20sp " />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/button4"
+            android:layout_marginBottom="103dp"
+            android:layout_toEndOf="@+id/gridl"
+            android:text="Puntaje:"
+            android:textColor="@android:color/background_light"
+            android:textSize="20sp " />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView3"
+            android:layout_alignBottom="@+id/textView3"
+            android:layout_toEndOf="@+id/textView3"
+            android:text="0"
+            android:textColor="@android:color/background_light"
+            android:textSize="24sp" />
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
